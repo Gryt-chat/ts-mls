@@ -100,7 +100,6 @@ import { LifetimeConfig } from "./lifetimeConfig.js"
 import { KeyPackageEqualityConfig } from "./keyPackageEqualityConfig.js"
 import { ClientConfig, defaultClientConfig } from "./clientConfig.js"
 import { decodeExternalSender } from "./externalSender.js"
-import { arraysEqual } from "./util/array.js"
 import { BufferEncoder, contramapBufferEncoders, encode, Encoder } from "./codec/tlsEncoder.js"
 import { CredentialTypeName } from "./credentialType.js"
 import { bigintMapEncoder, decodeBigintMap, decodeVarLenData, varLenDataEncoder } from "./codec/variableLength.js"
@@ -519,12 +518,13 @@ export async function validateRatchetTree(
           return new ValidationError("Unmerged leaf did not represent a non-blank descendant leaf node")
 
         for (const parentIdx of dp) {
+          if (parentIdx === toNodeIndex(i)) break
           const dpNode = tree[parentIdx]
 
           if (dpNode !== undefined) {
             if (dpNode.nodeType !== "parent") return new InternalError("Expected parent node")
 
-            if (!arraysEqual(dpNode.parent.unmergedLeaves, n.parent.unmergedLeaves))
+            if (!dpNode.parent.unmergedLeaves.includes(unmergedLeaf))
               return new ValidationError("non-blank intermediate node must list leaf node in its unmerged_leaves")
           }
         }
