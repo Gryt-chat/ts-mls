@@ -1,6 +1,6 @@
 {
   "name": "ts-mls",
-  "version": "1.6.4",
+  "version": "1.6.4-gryt.1",
   "description": "",
   "homepage": "https://github.com/LukaJCB/ts-mls#readme",
   "bugs": {
@@ -28,8 +28,8 @@
   },
   "peerDependencies": {
     "@hpke/chacha20poly1305": "1.8.0",
-    "@hpke/hybridkem-x-wing": "0.7.0",
     "@hpke/dhkem-x448": "1.8.0",
+    "@hpke/hybridkem-x-wing": "0.7.0",
     "@hpke/ml-kem": "0.3.0",
     "@noble/ciphers": "2.1.1",
     "@noble/curves": "2.0.1",
@@ -56,12 +56,12 @@
     }
   },
   "devDependencies": {
-    "@microsoft/api-extractor": "^7.52.13",
     "@eslint/js": "^9.33.0",
     "@hpke/chacha20poly1305": "1.8.0",
+    "@hpke/dhkem-x448": "1.8.0",
     "@hpke/hybridkem-x-wing": "0.7.0",
     "@hpke/ml-kem": "0.3.0",
-    "@hpke/dhkem-x448": "1.8.0",
+    "@microsoft/api-extractor": "^7.52.13",
     "@noble/ciphers": "2.1.1",
     "@noble/curves": "2.0.1",
     "@noble/hashes": "2.3.0",
