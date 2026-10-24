@@ -1,7 +1,7 @@
 {
-  "name": "ts-mls",
+  "name": "@gryt/ts-mls",
   "version": "1.6.4-gryt.1",
-  "description": "",
+  "description": "ts-mls 1.6.4 with one fix backported from 2.0 (RFC 9420 12.4.3.1 unmerged_leaves check), carried by Gryt until upstream ships 1.6.5. Same API.",
   "homepage": "https://github.com/LukaJCB/ts-mls#readme",
   "bugs": {
     "url": "https://github.com/LukaJCB/ts-mls/issues"
@@ -84,7 +84,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/LukaJCB/ts-mls.git"
+    "url": "git+https://github.com/Gryt-chat/ts-mls.git"
   },
   "license": "MIT",
   "author": "lukajcb",
@@ -134,5 +134,8 @@
     "fips204",
     "fips205",
     "edwards"
-  ]
+  ],
+  "publishConfig": {
+    "access": "public"
+  }
 }
