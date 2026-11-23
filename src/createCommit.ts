@@ -61,6 +61,7 @@ import { CryptoVerificationError, InternalError, UsageError, ValidationError } f
 import { ClientConfig, defaultClientConfig } from "./clientConfig.js"
 import { Extension, extensionsSupportedByCapabilities } from "./extension.js"
 import { encode } from "./codec/tlsEncoder.js"
+import { decodeVarLenData, varLenDataEncoder } from "./codec/variableLength.js"
 import { PublicMessage } from "./publicMessage.js"
 
 /** @public */
@@ -373,6 +374,22 @@ export async function createGroupInfoWithRatchetTree(
   return gi
 }
 
+/** RFC 9420 12.4.3.2: ExternalPub is an HPKEPublicKey<V>, so the key carries its own length. 1.6.4 wrote it bare. */
+function externalPubData(key: Uint8Array): Uint8Array {
+  return encode(varLenDataEncoder)(key)
+}
+
+/** The RFC form first. A bare key (1.6.4) can parse as a shorter one, which then fails to import, so fall back to it. */
+async function exportExternalSecret(data: Uint8Array, cs: CiphersuiteImpl) {
+  try {
+    const decoded = decodeVarLenData(data, 0)
+    if (decoded !== undefined && decoded[1] === data.length) return await exportSecret(decoded[0], cs)
+  } catch {
+    // a bare key
+  }
+  return exportSecret(data, cs)
+}
+
 /** @public */
 export async function createGroupInfoWithExternalPub(
   state: ClientState,
@@ -386,7 +403,7 @@ export async function createGroupInfoWithExternalPub(
     state.groupContext,
     state.confirmationTag,
     state,
-    [...extensions, { extensionType: "external_pub", extensionData: externalPub }],
+    [...extensions, { extensionType: "external_pub", extensionData: externalPubData(externalPub) }],
     cs,
   )
 
@@ -410,7 +427,7 @@ export async function createGroupInfoWithExternalPubAndRatchetTree(
     state,
     [
       ...extensions,
-      { extensionType: "external_pub", extensionData: externalPub },
+      { extensionType: "external_pub", extensionData: externalPubData(externalPub) },
       { extensionType: "ratchet_tree", extensionData: encodedTree },
     ],
     cs,
@@ -520,7 +537,7 @@ export async function joinGroupExternal(
   )
   if (!allExtensionsSupported) throw new UsageError("client does not support every extension in the GroupContext")
 
-  const { enc, secret: initSecret } = await exportSecret(externalPub.extensionData, cs)
+  const { enc, secret: initSecret } = await exportExternalSecret(externalPub.extensionData, cs)
 
   const ratchetTree = ratchetTreeFromExtension(groupInfo) ?? tree
 
