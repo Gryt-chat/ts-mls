@@ -1,7 +1,7 @@
 {
   "name": "@gryt/ts-mls",
-  "version": "1.6.4-gryt.1",
-  "description": "ts-mls 1.6.4 with one fix backported from 2.0 (RFC 9420 12.4.3.1 unmerged_leaves check), carried by Gryt until upstream ships 1.6.5. Same API.",
+  "version": "1.6.4-gryt.2",
+  "description": "ts-mls 1.6.4 with two fixes backported from 2.0 (RFC 9420 12.4.3.1 unmerged_leaves check, 12.4.3.2 external_pub encoding), carried by Gryt until upstream ships 1.6.5. Same API.",
   "homepage": "https://github.com/LukaJCB/ts-mls#readme",
   "bugs": {
     "url": "https://github.com/LukaJCB/ts-mls/issues"
